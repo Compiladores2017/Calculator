@@ -1,6 +1,10 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
- */options{  static = true;}PARSER_BEGIN(Calculator)package calc;
+ */options{  static = false;
+  DEBUG_PARSER = true;
+  DEBUG_TOKEN_MANAGER = true;
+  FORCE_LA_CHECK = true;
+  LOOKAHEAD = 2;}PARSER_BEGIN(Calculator)package calc;
 
 public class Calculator{  public static void main(String args []) throws ParseException  {    Calculator parser = new Calculator(System.in);
     double retorno = parser.one_line();    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");      try      {        switch (Calculator.one_line())        {          case 0 :           System.out.println("OK.");          break;          case 1 :           System.out.println("Goodbye.");          break;          default :           break;        }      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        Calculator.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(Calculator)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >
@@ -11,6 +15,7 @@ public class Calculator{  public static void main(String args []) throws Parse
 //  double res = 0.0;
 //}
 //{
+//  one_line()
 //  {
 //    return res;
 //  }

@@ -55,7 +55,7 @@ public class CalculadoraGUI extends JFrame {
 			public void actionPerformed(ActionEvent paramActionEvent) {
 				Calculator parser = new Calculator(new ByteArrayInputStream(
 						campo1.getText().getBytes()));
-				int ret;
+				double ret;
 				try {
 					ret = parser.one_line();
 					campo2.setForeground(Color.BLUE);

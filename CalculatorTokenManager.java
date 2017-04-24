@@ -6,28 +6,31 @@ public class CalculatorTokenManager implements CalculatorConstants
 {
 
   /** Debug output. */
-  public static  java.io.PrintStream debugStream = System.out;
+  public  java.io.PrintStream debugStream = System.out;
   /** Set debug output. */
-  public static  void setDebugStream(java.io.PrintStream ds) { debugStream = ds; }
-private static final int jjStopStringLiteralDfa_0(int pos, long active0)
+  public  void setDebugStream(java.io.PrintStream ds) { debugStream = ds; }
+private final int jjStopStringLiteralDfa_0(int pos, long active0)
 {
+      debugStream.println("   No more string literal token matches are possible.");
    switch (pos)
    {
       default :
          return -1;
    }
 }
-private static final int jjStartNfa_0(int pos, long active0)
+private final int jjStartNfa_0(int pos, long active0)
 {
    return jjMoveNfa_0(jjStopStringLiteralDfa_0(pos, active0), pos + 1);
 }
-static private int jjStopAtPos(int pos, int kind)
+private int jjStopAtPos(int pos, int kind)
 {
    jjmatchedKind = kind;
    jjmatchedPos = pos;
+   debugStream.println("   No more string literal token matches are possible.");
+   debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
    return pos + 1;
 }
-static private int jjMoveStringLiteralDfa0_0()
+private int jjMoveStringLiteralDfa0_0()
 {
    switch(curChar)
    {
@@ -48,15 +51,18 @@ static private int jjMoveStringLiteralDfa0_0()
       case 94:
          return jjStopAtPos(0, 9);
       default :
+      debugStream.println("   No string literal matches possible.");
          return jjMoveNfa_0(0, 0);
    }
 }
-static private int jjMoveNfa_0(int startState, int curPos)
+private int jjMoveNfa_0(int startState, int curPos)
 {
    int startsAt = 0;
    jjnewStateCnt = 1;
    int i = 1;
    jjstateSet[0] = startState;
+      debugStream.println("   Starting NFA to match one of : " + jjKindsForStateVector(curLexState, jjstateSet, 0, 1));
+      debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int)curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
    int kind = 0x7fffffff;
    for (;;)
    {
@@ -109,10 +115,14 @@ static private int jjMoveNfa_0(int startState, int curPos)
          kind = 0x7fffffff;
       }
       ++curPos;
+      if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
+         debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
       if ((i = jjnewStateCnt) == (startsAt = 1 - (jjnewStateCnt = startsAt)))
          return curPos;
+      debugStream.println("   Possible kinds of longer matches : " + jjKindsForStateVector(curLexState, jjstateSet, startsAt, i));
       try { curChar = input_stream.readChar(); }
       catch(java.io.IOException e) { return curPos; }
+      debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int)curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
    }
 }
 static final int[] jjnextStates = {
@@ -133,14 +143,14 @@ static final long[] jjtoToken = {
 static final long[] jjtoSkip = {
    0x1eL, 
 };
-static protected SimpleCharStream input_stream;
-static private final int[] jjrounds = new int[1];
-static private final int[] jjstateSet = new int[2];
-static protected char curChar;
+protected SimpleCharStream input_stream;
+private final int[] jjrounds = new int[1];
+private final int[] jjstateSet = new int[2];
+protected char curChar;
 /** Constructor. */
 public CalculatorTokenManager(SimpleCharStream stream){
-   if (input_stream != null)
-      throw new TokenMgrError("ERROR: Second call to constructor of static lexer. You must use ReInit() to initialize the static variables.", TokenMgrError.STATIC_LEXER_ERROR);
+   if (SimpleCharStream.staticFlag)
+      throw new Error("ERROR: Cannot use a static CharStream class with a non-static lexical analyzer.");
    input_stream = stream;
 }
 
@@ -151,14 +161,14 @@ public CalculatorTokenManager(SimpleCharStream stream, int lexState){
 }
 
 /** Reinitialise parser. */
-static public void ReInit(SimpleCharStream stream)
+public void ReInit(SimpleCharStream stream)
 {
    jjmatchedPos = jjnewStateCnt = 0;
    curLexState = defaultLexState;
    input_stream = stream;
    ReInitRounds();
 }
-static private void ReInitRounds()
+private void ReInitRounds()
 {
    int i;
    jjround = 0x80000001;
@@ -167,14 +177,14 @@ static private void ReInitRounds()
 }
 
 /** Reinitialise parser. */
-static public void ReInit(SimpleCharStream stream, int lexState)
+public void ReInit(SimpleCharStream stream, int lexState)
 {
    ReInit(stream);
    SwitchTo(lexState);
 }
 
 /** Switch to specified lex state. */
-static public void SwitchTo(int lexState)
+public void SwitchTo(int lexState)
 {
    if (lexState >= 1 || lexState < 0)
       throw new TokenMgrError("Error: Ignoring invalid lexical state : " + lexState + ". State unchanged.", TokenMgrError.INVALID_LEXICAL_STATE);
@@ -182,7 +192,7 @@ static public void SwitchTo(int lexState)
       curLexState = lexState;
 }
 
-static protected Token jjFillToken()
+protected Token jjFillToken()
 {
    final Token t;
    final String curTokenImage;
@@ -206,15 +216,15 @@ static protected Token jjFillToken()
    return t;
 }
 
-static int curLexState = 0;
-static int defaultLexState = 0;
-static int jjnewStateCnt;
-static int jjround;
-static int jjmatchedPos;
-static int jjmatchedKind;
+int curLexState = 0;
+int defaultLexState = 0;
+int jjnewStateCnt;
+int jjround;
+int jjmatchedPos;
+int jjmatchedKind;
 
 /** Get the next Token. */
-public static Token getNextToken() 
+public Token getNextToken() 
 {
   Token matchedToken;
   int curPos = 0;
@@ -228,6 +238,7 @@ public static Token getNextToken()
    }
    catch(java.io.IOException e)
    {
+      debugStream.println("Returning the <EOF> token.");
       jjmatchedKind = 0;
       matchedToken = jjFillToken();
       return matchedToken;
@@ -235,16 +246,24 @@ public static Token getNextToken()
 
    try { input_stream.backup(0);
       while (curChar <= 32 && (0x100002600L & (1L << curChar)) != 0L)
+   {
+      debugStream.println("Skipping character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int)curChar + ")");
          curChar = input_stream.BeginToken();
+   }
    }
    catch (java.io.IOException e1) { continue EOFLoop; }
    jjmatchedKind = 0x7fffffff;
    jjmatchedPos = 0;
+      debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int)curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
    curPos = jjMoveStringLiteralDfa0_0();
    if (jjmatchedKind != 0x7fffffff)
    {
       if (jjmatchedPos + 1 < curPos)
+      {
+         debugStream.println("   Putting back " + (curPos - jjmatchedPos - 1) + " characters into the input stream.");
          input_stream.backup(curPos - jjmatchedPos - 1);
+      }
+    debugStream.println("****** FOUND A " + tokenImage[jjmatchedKind] + " MATCH (" + TokenMgrError.addEscapes(new String(input_stream.GetSuffix(jjmatchedPos + 1))) + ") ******\n");
       if ((jjtoToken[jjmatchedKind >> 6] & (1L << (jjmatchedKind & 077))) != 0L)
       {
          matchedToken = jjFillToken();
@@ -278,7 +297,66 @@ public static Token getNextToken()
   }
 }
 
-static private void jjCheckNAdd(int state)
+protected static final int[][][] statesForState = {
+ {
+   { 0 },
+ },
+
+};
+protected static final int[][] kindForState = {
+{ 10}
+};
+   int kindCnt = 0;
+  protected  final String jjKindsForBitVector(int i, long vec)
+  {
+    String retVal = "";
+    if (i == 0)
+       kindCnt = 0;
+    for (int j = 0; j < 64; j++)
+    {
+       if ((vec & (1L << j)) != 0L)
+       {
+          if (kindCnt++ > 0)
+             retVal += ", ";
+          if (kindCnt % 5 == 0)
+             retVal += "\n     ";
+          retVal += tokenImage[i * 64 + j];
+       }
+    }
+    return retVal;
+  }
+
+  protected  final String jjKindsForStateVector(int lexState, int[] vec, int start, int end)
+  {
+    boolean[] kindDone = new boolean[15];
+    String retVal = "";
+    int cnt = 0;
+    for (int i = start; i < end; i++)
+    {
+     if (vec[i] == -1)
+       continue;
+     int[] stateSet = statesForState[curLexState][vec[i]];
+     for (int j = 0; j < stateSet.length; j++)
+     {
+       int state = stateSet[j];
+       if (!kindDone[kindForState[lexState][state]])
+       {
+          kindDone[kindForState[lexState][state]] = true;
+          if (cnt++ > 0)
+             retVal += ", ";
+          if (cnt % 5 == 0)
+             retVal += "\n     ";
+          retVal += tokenImage[kindForState[lexState][state]];
+       }
+     }
+    }
+    if (cnt == 0)
+       return "{  }";
+    else
+       return "{ " + retVal + " }";
+  }
+
+private void jjCheckNAdd(int state)
 {
    if (jjrounds[state] != jjround)
    {
@@ -286,13 +364,13 @@ static private void jjCheckNAdd(int state)
       jjrounds[state] = jjround;
    }
 }
-static private void jjAddStates(int start, int end)
+private void jjAddStates(int start, int end)
 {
    do {
       jjstateSet[jjnewStateCnt++] = jjnextStates[start];
    } while (start++ != end);
 }
-static private void jjCheckNAddTwoStates(int state1, int state2)
+private void jjCheckNAddTwoStates(int state1, int state2)
 {
    jjCheckNAdd(state1);
    jjCheckNAdd(state2);
