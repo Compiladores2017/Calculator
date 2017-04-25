@@ -4,29 +4,26 @@
   DEBUG_PARSER = true;
   DEBUG_TOKEN_MANAGER = true;
   DEBUG_LOOKAHEAD = true;
-  FORCE_LA_CHECK = true;
-  LOOKAHEAD = 2;}PARSER_BEGIN(Calculator)package calc;
+  FORCE_LA_CHECK = true;}PARSER_BEGIN(Calculator)package calc;
 
-public class Calculator{  public static void main(String args []) throws ParseException  {    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");      try      {        Calculator parser = new Calculator(System.in);
-    	double retorno = parser.Start();      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        Calculator.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(Calculator)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >
-| < POW : "^" >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}double Start() :{
+public class Calculator{  public static void main(String args []) throws ParseException  {      System.out.println("Reading from standard input...");      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");      try      {        Calculator parser = new Calculator(System.in);
+    	double retorno = parser.Start();      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        Calculator.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }  }}PARSER_END(Calculator)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >
+| < POW : "^" >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : ["0"-"9"] >}double Start() :{
   double a;
-}{	a = sum() { return a; }
-  < EOF > { System.exit(-1); }}double sum() :{
+}{	a = sum() {return a;}
+  < EOF > {System.exit(-1);}}double sum() :{
 	double a;
 	double b;
-}{  a = term()   (
-     < PLUS > b=sum()    { a += b; }
-     |< MINUS > b=sum()    { a -= b; }
-    )*
-   	{ return a; }}double term() :{
+}{  a = term()   (< PLUS > b=sum()	{a += b;}
+   |< MINUS > b=sum()	{a -= b;}
+   )*
+   	{return a;}}double term() :{
 	double a;
 	double b;
-}{  a = expo()  (
-    < MULTIPLY >	 b=term()	{ a *= b; }
-    |   < DIVIDE >	b=term()	{ a /= b; }
-    )*
-    { return a; }}
+}{  a = expo()  (< MULTIPLY >	b=term()	{a *= b;}
+  |< DIVIDE >	b=term()	{a /= b;}
+  )*
+    {return a;}}
 
 double expo() :
 {
@@ -34,16 +31,15 @@ double expo() :
   double b;}
 {
   a = unary()
-  (
-    < POW > b=term() { a = Math.pow(a,b); }  )*
+  (< POW > b=term()	{a = Math.pow(a,b);})*
   { return a; }}double unary() :{
   double a;
-}{  < MINUS >	a=element()	{ return -a; }
-|   a=element()	{ return a; }}double element() :{
+}{	< MINUS >	a=element()	{return -a;}
+|	a=element()	{ return a; }}double element() :{
     Token t;
     double a;
 }
 {
-    t = <CONSTANT>	{ return Double.parseDouble(t.toString()); }
-|   "(" a=sum() ")"	{ return a; }
+    t = <CONSTANT>	{return Double.parseDouble(t.toString());}
+|   "(" a=sum() ")"	{return a;}
 }
