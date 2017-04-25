@@ -57,7 +57,7 @@ public class CalculadoraGUI extends JFrame {
 						campo1.getText().getBytes()));
 				double ret;
 				try {
-					ret = parser.one_line();
+					ret = parser.Start();
 					campo2.setForeground(Color.BLUE);
 					campo2.setText(String.valueOf(ret));
 				} catch (Throwable t) {

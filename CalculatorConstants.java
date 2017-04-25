@@ -42,7 +42,6 @@ public interface CalculatorConstants {
     "\"^\"",
     "<CONSTANT>",
     "<DIGIT>",
-    "\";\"",
     "\"(\"",
     "\")\"",
   };

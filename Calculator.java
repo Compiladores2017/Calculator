@@ -4,25 +4,14 @@ package calc;
 public class Calculator implements CalculatorConstants {
   public static void main(String args []) throws ParseException
   {
-    Calculator parser = new Calculator(System.in);
-    double retorno = parser.one_line();
     while (true)
     {
       System.out.println("Reading from standard input...");
       System.out.print("Enter an expression like \u005c"1+(2+3)*4;\u005c" :");
       try
       {
-        switch (Calculator.one_line())
-        {
-          case 0 :
-          System.out.println("OK.");
-          break;
-          case 1 :
-          System.out.println("Goodbye.");
-          break;
-          default :
-          break;
-        }
+        Calculator parser = new Calculator(System.in);
+        double retorno = parser.Start();
       }
       catch (Exception e)
       {
@@ -39,108 +28,149 @@ public class Calculator implements CalculatorConstants {
     }
   }
 
-  final public int one_line() throws ParseException {
-    trace_call("one_line");
+  final public double Start() throws ParseException {
+    trace_call("Start");
     try {
-      if (jj_2_1(2)) {
-        sum();
-        jj_consume_token(12);
-    {if (true) return 0;}
-      } else if (jj_2_2(2)) {
-        jj_consume_token(12);
-    {if (true) return 1;}
+  double a;
+      a = sum();
+                    {if (true) return a;}
+      jj_consume_token(0);
+            System.exit(-1);
+    throw new Error("Missing return statement in function");
+    } finally {
+      trace_return("Start");
+    }
+  }
+
+  final public double sum() throws ParseException {
+    trace_call("sum");
+    try {
+        double a;
+        double b;
+      a = term();
+      label_1:
+      while (true) {
+        if (jj_2_1(2)) {
+          ;
+        } else {
+          break label_1;
+        }
+        if (jj_2_2(2)) {
+          jj_consume_token(PLUS);
+          b = sum();
+                           a += b;
+        } else if (jj_2_3(2)) {
+          jj_consume_token(MINUS);
+          b = sum();
+                             a -= b;
+        } else {
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+      }
+          {if (true) return a;}
+    throw new Error("Missing return statement in function");
+    } finally {
+      trace_return("sum");
+    }
+  }
+
+  final public double term() throws ParseException {
+    trace_call("term");
+    try {
+        double a;
+        double b;
+      a = expo();
+      label_2:
+      while (true) {
+        if (jj_2_4(2)) {
+          ;
+        } else {
+          break label_2;
+        }
+        if (jj_2_5(2)) {
+          jj_consume_token(MULTIPLY);
+          b = term();
+                                          a *= b;
+        } else if (jj_2_6(2)) {
+          jj_consume_token(DIVIDE);
+          b = term();
+                                          a /= b;
+        } else {
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+      }
+      {if (true) return a;}
+    throw new Error("Missing return statement in function");
+    } finally {
+      trace_return("term");
+    }
+  }
+
+  final public double expo() throws ParseException {
+    trace_call("expo");
+    try {
+  double a;
+  double b;
+      a = unary();
+      label_3:
+      while (true) {
+        if (jj_2_7(2)) {
+          ;
+        } else {
+          break label_3;
+        }
+        jj_consume_token(POW);
+        b = term();
+                       a = Math.pow(a,b);
+      }
+    {if (true) return a;}
+    throw new Error("Missing return statement in function");
+    } finally {
+      trace_return("expo");
+    }
+  }
+
+  final public double unary() throws ParseException {
+    trace_call("unary");
+    try {
+  double a;
+      if (jj_2_8(2)) {
+        jj_consume_token(MINUS);
+        a = element();
+                                  {if (true) return -a;}
+      } else if (jj_2_9(2)) {
+        a = element();
+                  {if (true) return a;}
       } else {
         jj_consume_token(-1);
         throw new ParseException();
       }
     throw new Error("Missing return statement in function");
     } finally {
-      trace_return("one_line");
-    }
-  }
-
-  final public void sum() throws ParseException {
-    trace_call("sum");
-    try {
-      term();
-      label_1:
-      while (true) {
-        if (jj_2_3(2)) {
-          ;
-        } else {
-          break label_1;
-        }
-        if (jj_2_4(2)) {
-          jj_consume_token(PLUS);
-        } else if (jj_2_5(2)) {
-          jj_consume_token(MINUS);
-        } else {
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-        term();
-      }
-    } finally {
-      trace_return("sum");
-    }
-  }
-
-  final public void term() throws ParseException {
-    trace_call("term");
-    try {
-      unary();
-      label_2:
-      while (true) {
-        if (jj_2_6(2)) {
-          ;
-        } else {
-          break label_2;
-        }
-        if (jj_2_7(2)) {
-          jj_consume_token(MULTIPLY);
-        } else if (jj_2_8(2)) {
-          jj_consume_token(DIVIDE);
-        } else {
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-        unary();
-      }
-    } finally {
-      trace_return("term");
-    }
-  }
-
-  final public void unary() throws ParseException {
-    trace_call("unary");
-    try {
-      if (jj_2_9(2)) {
-        jj_consume_token(MINUS);
-        element();
-      } else if (jj_2_10(2)) {
-        element();
-      } else {
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-    } finally {
       trace_return("unary");
     }
   }
 
-  final public void element() throws ParseException {
+  final public double element() throws ParseException {
     trace_call("element");
     try {
-      if (jj_2_11(2)) {
-        jj_consume_token(CONSTANT);
-      } else if (jj_2_12(2)) {
+    Token t;
+    double a;
+      if (jj_2_10(2)) {
+        t = jj_consume_token(CONSTANT);
+                          {if (true) return Double.parseDouble(t.toString());}
+      } else if (jj_2_11(2)) {
+        jj_consume_token(12);
+        a = sum();
         jj_consume_token(13);
-        sum();
-        jj_consume_token(14);
+                          {if (true) return a;}
       } else {
         jj_consume_token(-1);
         throw new ParseException();
       }
+    throw new Error("Missing return statement in function");
     } finally {
       trace_return("element");
     }
@@ -223,125 +253,115 @@ public class Calculator implements CalculatorConstants {
     finally { jj_save(10, xla); }
   }
 
-  private boolean jj_2_12(int xla) {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return !jj_3_12(); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(11, xla); }
-  }
-
-  private boolean jj_3_2() {
-    if (jj_scan_token(12)) return true;
-    return false;
-  }
-
   private boolean jj_3R_4() {
+    if (!jj_rescan) trace_call("sum(LOOKING AHEAD...)");
+    if (jj_3R_5()) { if (!jj_rescan) trace_return("sum(LOOKAHEAD FAILED)"); return true; }
+    { if (!jj_rescan) trace_return("sum(LOOKAHEAD SUCCEEDED)"); return false; }
+  }
+
+  private boolean jj_3_6() {
+    if (jj_scan_token(DIVIDE)) return true;
     if (jj_3R_5()) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3_6()) { jj_scanpos = xsp; break; }
-    }
-    return false;
-  }
-
-  private boolean jj_3_12() {
-    if (jj_scan_token(13)) return true;
-    if (jj_3R_3()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_6() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3_11()) {
-    jj_scanpos = xsp;
-    if (jj_3_12()) return true;
-    }
-    return false;
-  }
-
-  private boolean jj_3_11() {
-    if (jj_scan_token(CONSTANT)) return true;
-    return false;
-  }
-
-  private boolean jj_3_1() {
-    if (jj_3R_3()) return true;
-    if (jj_scan_token(12)) return true;
-    return false;
-  }
-
-  private boolean jj_3_5() {
-    if (jj_scan_token(MINUS)) return true;
-    return false;
-  }
-
-  private boolean jj_3_4() {
-    if (jj_scan_token(PLUS)) return true;
-    return false;
-  }
-
-  private boolean jj_3_10() {
-    if (jj_3R_6()) return true;
-    return false;
-  }
-
-  private boolean jj_3_3() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3_4()) {
-    jj_scanpos = xsp;
-    if (jj_3_5()) return true;
-    }
-    if (jj_3R_4()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_5() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3_9()) {
-    jj_scanpos = xsp;
-    if (jj_3_10()) return true;
-    }
     return false;
   }
 
   private boolean jj_3_9() {
+    if (jj_3R_6()) return true;
+    return false;
+  }
+
+  private boolean jj_3_4() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_5()) {
+    jj_scanpos = xsp;
+    if (jj_3_6()) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3_5() {
+    if (jj_scan_token(MULTIPLY)) return true;
+    if (jj_3R_5()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_8() {
+    if (!jj_rescan) trace_call("unary(LOOKING AHEAD...)");
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_8()) {
+    jj_scanpos = xsp;
+    if (jj_3_9()) { if (!jj_rescan) trace_return("unary(LOOKAHEAD FAILED)"); return true; }
+    }
+    { if (!jj_rescan) trace_return("unary(LOOKAHEAD SUCCEEDED)"); return false; }
+  }
+
+  private boolean jj_3_8() {
     if (jj_scan_token(MINUS)) return true;
     if (jj_3R_6()) return true;
     return false;
   }
 
-  private boolean jj_3R_3() {
-    if (jj_3R_4()) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3_3()) { jj_scanpos = xsp; break; }
-    }
-    return false;
-  }
-
-  private boolean jj_3_8() {
-    if (jj_scan_token(DIVIDE)) return true;
-    return false;
+  private boolean jj_3R_5() {
+    if (!jj_rescan) trace_call("term(LOOKING AHEAD...)");
+    if (jj_3R_7()) { if (!jj_rescan) trace_return("term(LOOKAHEAD FAILED)"); return true; }
+    { if (!jj_rescan) trace_return("term(LOOKAHEAD SUCCEEDED)"); return false; }
   }
 
   private boolean jj_3_7() {
-    if (jj_scan_token(MULTIPLY)) return true;
+    if (jj_scan_token(POW)) return true;
+    if (jj_3R_5()) return true;
     return false;
   }
 
-  private boolean jj_3_6() {
+  private boolean jj_3_11() {
+    if (jj_scan_token(12)) return true;
+    if (jj_3R_4()) return true;
+    return false;
+  }
+
+  private boolean jj_3_3() {
+    if (jj_scan_token(MINUS)) return true;
+    if (jj_3R_4()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_6() {
+    if (!jj_rescan) trace_call("element(LOOKING AHEAD...)");
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3_7()) {
+    if (jj_3_10()) {
     jj_scanpos = xsp;
-    if (jj_3_8()) return true;
+    if (jj_3_11()) { if (!jj_rescan) trace_return("element(LOOKAHEAD FAILED)"); return true; }
     }
-    if (jj_3R_5()) return true;
+    { if (!jj_rescan) trace_return("element(LOOKAHEAD SUCCEEDED)"); return false; }
+  }
+
+  private boolean jj_3_10() {
+    if (jj_scan_token(CONSTANT)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_7() {
+    if (!jj_rescan) trace_call("expo(LOOKING AHEAD...)");
+    if (jj_3R_8()) { if (!jj_rescan) trace_return("expo(LOOKAHEAD FAILED)"); return true; }
+    { if (!jj_rescan) trace_return("expo(LOOKAHEAD SUCCEEDED)"); return false; }
+  }
+
+  private boolean jj_3_1() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_2()) {
+    jj_scanpos = xsp;
+    if (jj_3_3()) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3_2() {
+    if (jj_scan_token(PLUS)) return true;
+    if (jj_3R_4()) return true;
     return false;
   }
 
@@ -364,7 +384,7 @@ public class Calculator implements CalculatorConstants {
    private static void jj_la1_init_0() {
       jj_la1_0 = new int[] {};
    }
-  final private JJCalls[] jj_2_rtns = new JJCalls[12];
+  final private JJCalls[] jj_2_rtns = new JJCalls[11];
   private boolean jj_rescan = false;
   private int jj_gc = 0;
 
@@ -482,6 +502,8 @@ public class Calculator implements CalculatorConstants {
       int i = 0; Token tok = token;
       while (tok != null && tok != jj_scanpos) { i++; tok = tok.next; }
       if (tok != null) jj_add_error_token(kind, i);
+    } else {
+      trace_scan(jj_scanpos, kind);
     }
     if (jj_scanpos.kind != kind) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) throw jj_ls;
@@ -550,7 +572,7 @@ public class Calculator implements CalculatorConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[15];
+    boolean[] la1tokens = new boolean[14];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -564,7 +586,7 @@ public class Calculator implements CalculatorConstants {
         }
       }
     }
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 14; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
@@ -634,7 +656,7 @@ public class Calculator implements CalculatorConstants {
 
   private void jj_rescan_token() {
     jj_rescan = true;
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < 11; i++) {
     try {
       JJCalls p = jj_2_rtns[i];
       do {
@@ -652,7 +674,6 @@ public class Calculator implements CalculatorConstants {
             case 8: jj_3_9(); break;
             case 9: jj_3_10(); break;
             case 10: jj_3_11(); break;
-            case 11: jj_3_12(); break;
           }
         }
         p = p.next;
